@@ -3,34 +3,36 @@
 #include <cstdint>
 #include <string>
 
-struct consolePosition {
+struct position {
   int16_t column;
   int16_t row;
 
-  constexpr consolePosition() : column(0), row(0){};
-  constexpr consolePosition(int16_t column, int16_t row) : column(column), row(row){};
-  constexpr consolePosition(const consolePosition& copy) = default;
-  constexpr consolePosition(consolePosition&& move) = default;
+  constexpr position() : column(0), row(0){};
+  constexpr position(int16_t column, int16_t row) : column(column), row(row){};
+  constexpr position(const position& copy) = default;
+  constexpr position(position&& move) = default;
 
-  consolePosition& operator=(const consolePosition& rhs) = default;
+  position& operator=(const position& rhs) = default;
 
-  constexpr consolePosition operator+(const consolePosition& rhs) const { return consolePosition(column + rhs.column, row + rhs.row); }
-  constexpr consolePosition operator-(const consolePosition& rhs) const { return consolePosition(column - rhs.column, row - rhs.row); }
+  constexpr position operator+(const position& rhs) const { return position(column + rhs.column, row + rhs.row); }
+  constexpr position operator-(const position& rhs) const { return position(column - rhs.column, row - rhs.row); }
 
-  constexpr consolePosition operator*(int16_t rhs) const { return consolePosition(column * rhs, row * rhs); }
-  constexpr consolePosition operator/(int16_t rhs) const { return consolePosition(column / rhs, row / rhs); }
+  constexpr position operator+(int16_t rhs) const { return position(column + rhs, row + rhs); }
+  constexpr position operator-(int16_t rhs) const { return position(column - rhs, row - rhs); }
+  constexpr position operator*(int16_t rhs) const { return position(column * rhs, row * rhs); }
+  constexpr position operator/(int16_t rhs) const { return position(column / rhs, row / rhs); }
 };
 
 void setupConsole();
 void enableColorCodes();
 void resetConsole();
 
-consolePosition getConsoleSize();
+position getConsoleSize();
 
 void printAnsiSequence(const std::string& sequence, bool includeBracket = true);
 void clearScreen();
 void hideCursor();
-void moveCursor(const consolePosition& pos);
+void moveCursor(const position& pos);
 void moveCursor(uint16_t column, uint16_t row);
 
 std::string getBoxChar(bool up, bool right, bool down, bool left);

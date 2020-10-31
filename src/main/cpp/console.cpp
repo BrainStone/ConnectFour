@@ -28,7 +28,7 @@ void enableColorCodes() {
     if (!SetConsoleMode(hStdout, dwMode)) throw "SetConsoleMode";
   } catch (const char* e) {
     std::cerr << e << std::endl;
-    std::exit(1);
+    std::exit(EXIT_FAILURE);
   }
 }
 
@@ -37,12 +37,12 @@ void resetConsole() {
   printAnsiSequence("c", false);
 }
 
-consolePosition getConsoleSize() {
+position getConsoleSize() {
   CONSOLE_SCREEN_BUFFER_INFO csbi;
 
   GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
 
-  return consolePosition(csbi.srWindow.Right - csbi.srWindow.Left + 1, csbi.srWindow.Bottom - csbi.srWindow.Top + 1);
+  return position(csbi.srWindow.Right - csbi.srWindow.Left + 1, csbi.srWindow.Bottom - csbi.srWindow.Top + 1);
 }
 
 void printAnsiSequence(const std::string& sequence, bool includeBracket) {
@@ -59,7 +59,7 @@ void clearScreen() {
 
 void hideCursor() { printAnsiSequence("?25l"); }
 
-void moveCursor(const consolePosition& pos) { moveCursor(pos.column, pos.row); }
+void moveCursor(const position& pos) { moveCursor(pos.column, pos.row); }
 
 void moveCursor(uint16_t column, uint16_t row) {
   std::ostringstream ss;
