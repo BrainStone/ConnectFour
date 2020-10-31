@@ -8,3 +8,14 @@ application {
     // Ok for now
     targetMachines.add(machines.windows.x86_64)
 }
+
+tasks.withType(CppCompile).configureEach {
+    compilerArgs.addAll toolChain.map { toolChain ->
+        if (toolChain in [ Gcc, Clang ]) {
+            return []
+        } else if (toolChain in VisualCpp) {
+            return ['/utf-8', '/std:c++17']
+        }
+        return []
+    }
+}
