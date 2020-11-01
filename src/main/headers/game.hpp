@@ -2,7 +2,7 @@
 
 #include <bitset>
 
-#include "console.h"
+#include "console.hpp"
 
 constexpr int16_t gridWidth = 7;
 constexpr int16_t gridHeight = 6;

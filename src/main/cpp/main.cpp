@@ -1,11 +1,11 @@
-#include "main.h"
+#include "main.hpp"
 
 #include <windows.h>
 
 #include <random>
 
-#include "console.h"
-#include "game.h"
+#include "console.hpp"
+#include "game.hpp"
 
 int main() {
   setupGame();

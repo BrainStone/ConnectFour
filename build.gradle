@@ -19,3 +19,9 @@ tasks.withType(CppCompile).configureEach {
         return []
     }
 }
+
+visualStudio {
+    projects.all {
+        headerFiles.from(project.fileTree('src/main/headers'))
+    }
+}
