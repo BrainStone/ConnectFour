@@ -1,6 +1,7 @@
 #pragma once
 
 #include <bitset>
+#include <optional>
 
 #include "console.hpp"
 
@@ -28,11 +29,18 @@ class boardState {
   boardState();
   boardState(const boardState& copy);
 
-  boardPiece getAtPosition(const position& pos);
+  void render() const;
+  std::optional<boardState> dropPiece(int16_t column, const boardPiece& piece) const;
+
+  // Low level methods. Avoid if possible!
+  boardPiece getAtPosition(const position& pos) const;
   void setAtPosition(const position& pos, const boardPiece& piece);
+
+  constexpr bool operator==(const boardState& rhs) const { return board == rhs.board; }
+  constexpr bool operator!=(const boardState& rhs) const { return board != rhs.board; };
 };
 
 void setupGame();
 
 void drawGrid();
-void drawStone(const position& pos, bool color);
+void drawStone(const position& pos, const boardPiece& piece, bool flush = true);

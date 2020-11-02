@@ -8,7 +8,37 @@ position startPos;
 boardState::boardState() : board() {}
 boardState::boardState(const boardState& copy) : board(copy.board) {}
 
-boardPiece boardState::getAtPosition(const position& pos) {
+void boardState::render() const {
+  position pos(0, 0);
+
+  for (pos.column = 0; pos.column < gridWidth; ++pos.column) {
+    for (pos.row = 0; pos.row < gridHeight; ++pos.row) {
+      drawStone(pos, getAtPosition(pos), false);
+    }
+  }
+
+  std::cout.flush();
+}
+
+std::optional<boardState> boardState::dropPiece(int16_t column, const boardPiece& piece) const {
+  if (piece == boardPiece::EMPTY) return std::nullopt;
+
+  position pos(column, gridHeight - 1);
+
+  for (; pos.row >= 0; --pos.row) {
+    if (getAtPosition(pos) == boardPiece::EMPTY) {
+      boardState copy(*this);
+
+      copy.setAtPosition(pos, piece);
+
+      return copy;
+    }
+  }
+
+  return std::nullopt;
+}
+
+boardPiece boardState::getAtPosition(const position& pos) const {
   const size_t baseOffset = getBaseOffset(pos);
 
   if (board.test(baseOffset))
@@ -56,13 +86,19 @@ void drawGrid() {
   std::cout.flush();
 }
 
-void drawStone(const position& pos, bool color) {
+void drawStone(const position& pos, const boardPiece& piece, bool flush) {
   moveCursor(startPos + ((pos * 2) + position(1, 1)));
 
-  if (color)
-    printAnsiSequence("91m");
-  else
-    printAnsiSequence("93m");
+  if (piece == boardPiece::EMPTY) {
+    std::cout << ' ';
+  } else {
+    if (piece == boardPiece::RED)
+      printAnsiSequence("91m");
+    else
+      printAnsiSequence("93m");
 
-  std::cout << 'O' << std::flush;
+    std::cout << 'O';
+  }
+
+  if (flush) std::cout.flush();
 }
