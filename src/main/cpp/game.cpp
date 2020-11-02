@@ -13,7 +13,7 @@ void boardState::render() const {
 
   for (pos.column = 0; pos.column < gridWidth; ++pos.column) {
     for (pos.row = 0; pos.row < gridHeight; ++pos.row) {
-      drawStone(pos, getAtPosition(pos), false);
+      drawStone(pos, getAtPosition(pos), true, false);
     }
   }
 
@@ -56,6 +56,10 @@ void boardState::setAtPosition(const position& pos, const boardPiece& piece) {
   board.set(baseOffset + 1, piece == boardPiece::YELLOW);
 }
 
+bool boardState::operator==(const boardState& rhs) const { return board == rhs.board; }
+
+bool boardState::operator!=(const boardState& rhs) const { return board != rhs.board; }
+
 void setupGame() {
   setupConsole();
 
@@ -86,16 +90,16 @@ void drawGrid() {
   std::cout.flush();
 }
 
-void drawStone(const position& pos, const boardPiece& piece, bool flush) {
+void drawStone(const position& pos, const boardPiece& piece, bool fullColor, bool flush) {
   moveCursor(startPos + ((pos * 2) + position(1, 1)));
 
   if (piece == boardPiece::EMPTY) {
     std::cout << ' ';
   } else {
     if (piece == boardPiece::RED)
-      printAnsiSequence("91m");
+      printAnsiSequence(fullColor ? "91m" : "31m");
     else
-      printAnsiSequence("93m");
+      printAnsiSequence(fullColor ? "93m" : "33m");
 
     std::cout << 'O';
   }

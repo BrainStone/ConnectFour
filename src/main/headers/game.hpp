@@ -36,11 +36,11 @@ class boardState {
   boardPiece getAtPosition(const position& pos) const;
   void setAtPosition(const position& pos, const boardPiece& piece);
 
-  constexpr bool operator==(const boardState& rhs) const { return board == rhs.board; }
-  constexpr bool operator!=(const boardState& rhs) const { return board != rhs.board; };
+  bool operator==(const boardState& rhs) const;
+  bool operator!=(const boardState& rhs) const;
 };
 
 void setupGame();
 
 void drawGrid();
-void drawStone(const position& pos, const boardPiece& piece, bool flush = true);
+void drawStone(const position& pos, const boardPiece& piece, bool fullColor = true, bool flush = true);
