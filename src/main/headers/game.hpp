@@ -30,7 +30,9 @@ class boardState {
   boardState(const boardState& copy);
 
   void render() const;
+  int16_t getColumnFreeRow(int16_t column) const;
   std::optional<boardState> dropPiece(int16_t column, const boardPiece& piece) const;
+  std::optional<boardPiece> getWinner() const;
 
   // Low level methods. Avoid if possible!
   boardPiece getAtPosition(const position& pos) const;

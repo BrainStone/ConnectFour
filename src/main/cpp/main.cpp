@@ -20,6 +20,17 @@ int main() {
     state.render();
 
     Sleep(100);
+
+    if (state.getWinner()) break;
+  }
+
+  for (int16_t column = 0; column < gridWidth; ++column) {
+    boardPiece piece = colorDist(generator) ? boardPiece::RED : boardPiece::YELLOW;
+
+    drawStone({column, -1}, piece);
+    drawStone({column, state.getColumnFreeRow(column)}, piece, false);
+
+    Sleep(500);
   }
 
   return EXIT_SUCCESS;

@@ -20,22 +20,71 @@ void boardState::render() const {
   std::cout.flush();
 }
 
-std::optional<boardState> boardState::dropPiece(int16_t column, const boardPiece& piece) const {
-  if (piece == boardPiece::EMPTY) return std::nullopt;
-
+int16_t boardState::getColumnFreeRow(int16_t column) const {
   position pos(column, gridHeight - 1);
 
   for (; pos.row >= 0; --pos.row) {
     if (getAtPosition(pos) == boardPiece::EMPTY) {
-      boardState copy(*this);
-
-      copy.setAtPosition(pos, piece);
-
-      return copy;
+      return pos.row;
     }
   }
 
-  return std::nullopt;
+  return -1;
+}
+
+std::optional<boardState> boardState::dropPiece(int16_t column, const boardPiece& piece) const {
+  if (piece == boardPiece::EMPTY) return std::nullopt;
+
+  int16_t freeRow = getColumnFreeRow(column);
+
+  if (freeRow < 0) return std::nullopt;
+
+  boardState copy(*this);
+
+  copy.setAtPosition({column, freeRow}, piece);
+
+  return copy;
+}
+
+std::optional<boardPiece> boardState::getWinner() const {
+  constexpr position offsetX(1, 0);
+  constexpr position offsetY(0, 1);
+  constexpr position offsetDigDown(1, 1);
+  constexpr position offsetDigUp(1, -1);
+
+  position pos;
+  boardPiece basePiece;
+
+  // Left - Right
+  for (pos = {0, 0}; pos.column < (gridWidth - 3); ++pos.column) {
+    for (pos.row = 0; pos.row < gridHeight; ++pos.row) {
+      basePiece = getAtPosition(pos);
+
+      if ((basePiece != boardPiece::EMPTY) && (basePiece == getAtPosition(pos + (offsetX * 1))) && (basePiece == getAtPosition(pos + (offsetX * 2))) &&
+          (basePiece == getAtPosition(pos + (offsetX * 3))))
+        return basePiece;
+    }
+  }
+
+  // Top - Down
+  for (pos = {0, 0}; pos.column < gridWidth; ++pos.column) {
+    for (pos.row = 0; pos.row < (gridHeight - 3); ++pos.row) {
+      basePiece = getAtPosition(pos);
+
+      if ((basePiece != boardPiece::EMPTY) && (basePiece == getAtPosition(pos + (offsetY * 1))) && (basePiece == getAtPosition(pos + (offsetY * 2))) &&
+          (basePiece == getAtPosition(pos + (offsetY * 3))))
+        return basePiece;
+    }
+  }
+
+  // If no winner was found, let's check if the board is full
+  // If there's any space at the top of the board there's still room
+  for (pos = {0, 0}; pos.column < gridWidth; ++pos.column) {
+    if (getAtPosition(pos) == boardPiece::EMPTY) return std::nullopt;
+  }
+
+  // Draw
+  return boardPiece::EMPTY;
 }
 
 boardPiece boardState::getAtPosition(const position& pos) const {
