@@ -77,6 +77,28 @@ std::optional<boardPiece> boardState::getWinner() const {
     }
   }
 
+  // Diagonal Top Left - Bottom Right
+  for (pos = {0, 0}; pos.column < (gridWidth - 3); ++pos.column) {
+    for (pos.row = 0; pos.row < (gridHeight - 3); ++pos.row) {
+      basePiece = getAtPosition(pos);
+
+      if ((basePiece != boardPiece::EMPTY) && (basePiece == getAtPosition(pos + (offsetDigDown * 1))) &&
+          (basePiece == getAtPosition(pos + (offsetDigDown * 2))) && (basePiece == getAtPosition(pos + (offsetDigDown * 3))))
+        return basePiece;
+    }
+  }
+
+  // Diagonal Bottom Left - Top Right
+  for (pos = {0, 0}; pos.column < (gridWidth - 3); ++pos.column) {
+    for (pos.row = gridHeight - 1; pos.row >= 3; --pos.row) {
+      basePiece = getAtPosition(pos);
+
+      if ((basePiece != boardPiece::EMPTY) && (basePiece == getAtPosition(pos + (offsetDigUp * 1))) && (basePiece == getAtPosition(pos + (offsetDigUp * 2))) &&
+          (basePiece == getAtPosition(pos + (offsetDigUp * 3))))
+        return basePiece;
+    }
+  }
+
   // If no winner was found, let's check if the board is full
   // If there's any space at the top of the board there's still room
   for (pos = {0, 0}; pos.column < gridWidth; ++pos.column) {

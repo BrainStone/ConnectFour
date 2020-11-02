@@ -1,8 +1,8 @@
 #include "main.hpp"
 
-#include <windows.h>
-
 #include <random>
+
+#include <windows.h>
 
 #include "game.hpp"
 
