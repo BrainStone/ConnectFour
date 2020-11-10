@@ -17,12 +17,15 @@ int main() {
 
   for (int i = 0; i < 100; ++i) {
     state = state.dropPiece(columDist(generator), colorDist(generator) ? boardPiece::RED : boardPiece::YELLOW).value_or(state);
-    state.render();
+    state.render(false);
 
     Sleep(100);
 
+    state.render();
     if (state.getWinner()) break;
   }
+
+  Sleep(100);
 
   for (int16_t column = 0; column < gridWidth; ++column) {
     boardPiece piece = colorDist(generator) ? boardPiece::RED : boardPiece::YELLOW;

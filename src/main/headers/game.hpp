@@ -2,6 +2,7 @@
 
 #include <bitset>
 #include <optional>
+#include <tuple>
 
 #include "console.hpp"
 
@@ -19,9 +20,16 @@ extern position startPos;
 
 enum class boardPiece { EMPTY = 0b00, RED = 0b01, YELLOW = 0b10 };
 
+// Represents Winning piece, positon of first piece, directions
+// Postition of first piece and directions are empty if it's a draw.
+using winningParameters = const std::tuple<boardPiece, position, position>;
+
 class boardState {
  private:
   std::bitset<gridWidth * gridHeight * 2> board;
+
+  mutable std::optional<winningParameters> winParams;
+  mutable bool winParamsCalculated;
 
   static constexpr size_t getBaseOffset(const position& pos) { return (pos.column + (pos.row * gridWidth)) * 2; }
 
@@ -29,7 +37,7 @@ class boardState {
   boardState();
   boardState(const boardState& copy);
 
-  void render() const;
+  void render(bool showWin = true) const;
   int16_t getColumnFreeRow(int16_t column) const;
   std::optional<boardState> dropPiece(int16_t column, const boardPiece& piece) const;
   std::optional<boardPiece> getWinner() const;
@@ -37,7 +45,9 @@ class boardState {
   // Low level methods. Avoid if possible!
   boardPiece getAtPosition(const position& pos) const;
   void setAtPosition(const position& pos, const boardPiece& piece);
+  const std::optional<winningParameters>& getWinningParameters() const;
 
+  boardState& operator=(const boardState& copy);
   bool operator==(const boardState& rhs) const;
   bool operator!=(const boardState& rhs) const;
 };

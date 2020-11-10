@@ -21,6 +21,51 @@ struct position {
   constexpr position operator-(int16_t rhs) const { return position(column - rhs, row - rhs); }
   constexpr position operator*(int16_t rhs) const { return position(column * rhs, row * rhs); }
   constexpr position operator/(int16_t rhs) const { return position(column / rhs, row / rhs); }
+
+  constexpr position operator+=(const position& rhs) {
+    column += rhs.column;
+    row += rhs.row;
+
+    return *this;
+  }
+
+  constexpr position operator-=(const position& rhs) {
+    column -= rhs.column;
+    row -= rhs.row;
+
+    return *this;
+  }
+
+  constexpr position operator+=(int16_t rhs) {
+    column += rhs;
+    row += rhs;
+
+    return *this;
+  }
+
+  constexpr position operator-=(int16_t rhs) {
+    column -= rhs;
+    row -= rhs;
+
+    return *this;
+  }
+
+  constexpr position operator*=(int16_t rhs) {
+    column *= rhs;
+    row *= rhs;
+
+    return *this;
+  }
+
+  constexpr position operator/=(int16_t rhs) {
+    column /= rhs;
+    row /= rhs;
+
+    return *this;
+  }
+
+  constexpr bool operator==(const position& rhs) const { return (column == rhs.column) && (row == rhs.row); }
+  constexpr bool operator!=(const position& rhs) const { return !(*this == rhs); }
 };
 
 void setupConsole();
