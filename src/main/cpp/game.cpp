@@ -203,7 +203,7 @@ void setupGame() {
 
 void drawGrid() {
   moveCursor(startPos);
-  printAnsiSequence("90m");
+  printAnsiSequence(";90m");
 
   uint16_t x, y;
   for (y = 0; y < renderGridHeight; ++y) {
@@ -229,9 +229,9 @@ void drawStone(const position& pos, const boardPiece& piece, bool fullColor, boo
     std::cout << ' ';
   } else {
     if (piece == boardPiece::RED)
-      printAnsiSequence(fullColor ? "91m" : "31m");
+      printAnsiSequence(fullColor ? ";91m" : ";2;31m");
     else
-      printAnsiSequence(fullColor ? "93m" : "33m");
+      printAnsiSequence(fullColor ? ";93m" : ";2;33m");
 
     std::cout << 'O';
   }
